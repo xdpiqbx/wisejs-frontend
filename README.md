@@ -4,7 +4,7 @@
 
 ---
 
-[Continue ...](https://youtu.be/ah5voE_SGjo?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&t=590)
+[Continue ...](https://youtu.be/ah5voE_SGjo?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&t=1414)
 
 ---
 
