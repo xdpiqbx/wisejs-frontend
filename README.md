@@ -4,7 +4,7 @@
 
 ---
 
-[Continue ...](https://youtu.be/ah5voE_SGjo?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&t=1912)
+[Continue ...](https://youtu.be/ah5voE_SGjo?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&t=2075)
 
 ---
 
@@ -250,6 +250,22 @@ export default function* rootSaga() { /* ... */ }
 
 ---
 
-Блокирующие еффекты и не блокирующие еффекты
+### Блокирующие еффекты и не блокирующие еффекты
 
-//https://youtu.be/ah5voE_SGjo?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&t=1912
+`take` & `call` - блокирующие еффекты
+`takeEvery` сам по себе не блокирующий, но внутри использует `take` + `fork`
+
+---
+
+### [fork()](https://redux-saga.js.org/docs/api/#forkfn-args)
+
+- Еффект, который указывает redux middleware выполнить неблокирующий вызов переданной функции
+  (запросы выполняются паралельно)
+
+```js
+export function* workerSaga() {
+  // ...
+  yield fork(loadPeople);
+  yield fork(loadPlanets);
+}
+```
