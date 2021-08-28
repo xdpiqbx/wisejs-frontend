@@ -4,7 +4,7 @@
 
 ---
 
-[Continue ...](https://youtu.be/ah5voE_SGjo?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&t=1414)
+[Continue ...](https://youtu.be/ah5voE_SGjo?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&t=1912)
 
 ---
 
@@ -247,3 +247,9 @@ export function* workerSaga() {
 export function* watchClickSaga() { /* ... */ }
 export default function* rootSaga() { /* ... */ }
 ```
+
+---
+
+Блокирующие еффекты и не блокирующие еффекты
+
+//https://youtu.be/ah5voE_SGjo?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&t=1912
