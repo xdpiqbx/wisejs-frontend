@@ -7,7 +7,7 @@ function App() {
   return (
     <div>
       It works!{' '}
-      <button onClick={() => dispatch({ type: 'CLICK' })}>Click me</button>
+      <button onClick={() => dispatch({ type: 'LOAD_DATA' })}>Click me</button>
     </div>
   );
 }

@@ -1,17 +1,19 @@
-import { takeLeading } from '@redux-saga/core/effects';
+import { takeEvery, call, put } from '@redux-saga/core/effects';
 
-const wait = (time) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, time);
-  });
+const getPeople = async () => {
+  const BASE_URL = 'https://swapi.dev/api';
+  const request = await fetch(`${BASE_URL}/people/`);
+  const data = await request.json();
+  return data;
+};
 
 export function* workerSaga() {
-  yield wait(1000);
-  console.log('click from saga');
+  const data = yield call(getPeople);
+  yield put({ type: 'SET_PEOPLE', payload: data.results }); // задиспатчил action
 }
 
 export function* watchClickSaga() {
-  yield takeLeading('CLICK', workerSaga);
+  yield takeEvery('LOAD_DATA', workerSaga);
 }
 
 export default function* rootSaga() {

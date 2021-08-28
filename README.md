@@ -163,3 +163,87 @@ export function* watchClickSaga() {
   yield takeLeading('CLICK', workerSaga); // отработает через секунду после первого клика
 }
 ```
+
+---
+
+### Пример асинхронного запроса на сервер
+
+```js
+import { takeEvery } from '@redux-saga/core/effects';
+
+const getPeople = async () => {
+  const BASE_URL = 'https://swapi.dev/api';
+  const request = await fetch(`${BASE_URL}/people/1/`);
+  const data = await request.json();
+  return data;
+};
+
+export function* workerSaga() {
+  const data = yield getPeople();
+  console.log(data); // тут получил json от сервера
+}
+
+export function* watchClickSaga() {
+  yield takeEvery('CLICK', workerSaga);
+}
+
+export default function* rootSaga() {
+  yield watchClickSaga();
+}
+```
+
+Теперь нужно положить данные в `state` с помощю еффекта `put`
+
+```js
+// Готовлю State и Action
+const initialState = {
+  peoples: [],
+};
+
+export default function reducer(state = initialState, action) {
+  switch (action.type) {
+    case 'SET_PEOPLE':
+      return { ...state, peoples: [...state.peoples, ...action.payload] };
+    default:
+      return state;
+  }
+}
+```
+
+---
+
+### [put()](https://redux-saga.js.org/docs/api/#putaction)
+
+- `dispatch`-ит actions
+
+```js
+import { /* ... */, put } from '@redux-saga/core/effects';
+const getPeople = async () =>  { /* ... */ }
+
+export function* workerSaga() {
+  const data = yield getPeople();
+  yield put({ type: 'SET_PEOPLE', payload: data.results }); // задиспатчил action
+}
+
+export function* watchClickSaga() { /* ... */ }
+export default function* rootSaga() { /* ... */ }
+```
+
+---
+
+### [call()](https://redux-saga.js.org/docs/api/#callfn-args)
+
+- Выполняет переданную `fn`. Если `fn` вернёт `promise`, приостанавливает сагу до тех пор, пока `promise` не вызовет `resolve`. `fn` - простая, асинхронная или генератор. Следущие параметры - аргументы
+
+```js
+import { /* ... */, put } from '@redux-saga/core/effects';
+const getPeople = async () =>  { /* ... */ }
+
+export function* workerSaga() {
+  const data = yield call(getPeople); // Тут `fn` - асинхронная
+  yield put({ type: 'SET_PEOPLE', payload: data.results });
+}
+
+export function* watchClickSaga() { /* ... */ }
+export default function* rootSaga() { /* ... */ }
+```
