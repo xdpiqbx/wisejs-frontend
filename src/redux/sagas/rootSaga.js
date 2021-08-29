@@ -30,18 +30,6 @@ export function* loadPlanets() {
 }
 
 export function* workerSaga() {
-  // const data = yield call(getPeople);
-  // yield put({ type: 'SET_PEOPLE', payload: data.results }); // задиспатчил action
-
-  // const people = yield call(swapiGet, 'people');
-  // console.log('people', people);
-
-  // const planets = yield call(swapiGet, 'planets');
-  // console.log('planets', planets);
-
-  // yield put({ type: 'SET_PEOPLE', payload: people.results }); // задиспатчил action
-  // yield put({ type: 'SET_PLANETS', payload: planets.results }); // задиспатчил action
-
   yield spawn(loadPeople);
   yield spawn(loadPlanets);
 }
