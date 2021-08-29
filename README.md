@@ -262,12 +262,44 @@ export default function* rootSaga() { /* ... */ }
 - Еффект, который указывает redux middleware выполнить неблокирующий вызов переданной функции
   (запросы выполняются паралельно)
 - Все форкнутые (разветвлённые) задачи прикреплены к родителям
-- Любая ошибка в форке всплывает к родительским задачам, если ошибка произошла то родительская задача блоенкируется и поле не будет вызвано
 
 ```js
 export function* workerSaga() {
   // ...
   yield fork(loadPeople);
   yield fork(loadPlanets);
+}
+```
+
+- Любая ошибка в форке всплывает к родительским задачам, если ошибка произошла то родительская задача блокируется и поле не будет вызвано. Тут не отработают не `loadPeople` не `loadPlanets`
+
+```js
+export function* loadPeople() {
+  throw new Error();
+  // Error
+  //    at loadPeople
+  // The above error occurred in task loadPeople
+  // created by workerSaga
+  /*
+  Tasks cancelled due to error:
+    workerSaga
+    takeEvery(LOAD_DATA, workerSaga)
+  */
+}
+```
+
+### [spawn()](https://redux-saga.js.org/docs/api/#spawnfn-args)
+
+- Создаёт паралельную задачу в корне саги, сам процесс привязан к родителю
+
+- Не блокирующая задача
+
+- Тут `loadPeople` не отработает, но отработает `loadPlanets`
+
+```js
+export function* workerSaga() {
+  // ...
+  yield spawn(loadPeople);
+  yield spawn(loadPlanets);
 }
 ```

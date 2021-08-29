@@ -1,4 +1,4 @@
-import { takeEvery, call, put, fork } from '@redux-saga/core/effects';
+import { takeEvery, call, put, fork, spawn } from '@redux-saga/core/effects';
 
 // const getPeople = async () => {
 //   const BASE_URL = 'https://swapi.dev/api';
@@ -15,6 +15,9 @@ const swapiGet = async (pattern) => {
 };
 
 export function* loadPeople() {
+  throw new Error();
+  // The above error occurred in task loadPeople
+  // created by workerSaga
   const people = yield call(swapiGet, 'people');
   yield put({ type: 'SET_PEOPLE', payload: people.results });
   console.log('load people');
@@ -39,8 +42,8 @@ export function* workerSaga() {
   // yield put({ type: 'SET_PEOPLE', payload: people.results }); // задиспатчил action
   // yield put({ type: 'SET_PLANETS', payload: planets.results }); // задиспатчил action
 
-  yield fork(loadPeople);
-  yield fork(loadPlanets);
+  yield spawn(loadPeople);
+  yield spawn(loadPlanets);
 }
 
 export function* watchLoadDataSaga() {
