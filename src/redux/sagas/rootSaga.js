@@ -17,11 +17,13 @@ const swapiGet = async (pattern) => {
 export function* loadPeople() {
   const people = yield call(swapiGet, 'people');
   yield put({ type: 'SET_PEOPLE', payload: people.results });
+  console.log('load people');
 }
 
 export function* loadPlanets() {
   const planets = yield call(swapiGet, 'planets');
   yield put({ type: 'SET_PLANETS', payload: planets.results });
+  console.log('load planets');
 }
 
 export function* workerSaga() {
@@ -41,10 +43,10 @@ export function* workerSaga() {
   yield fork(loadPlanets);
 }
 
-export function* watchClickSaga() {
+export function* watchLoadDataSaga() {
   yield takeEvery('LOAD_DATA', workerSaga);
 }
 
 export default function* rootSaga() {
-  yield watchClickSaga();
+  yield fork(watchLoadDataSaga);
 }
