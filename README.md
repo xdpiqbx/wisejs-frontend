@@ -1,10 +1,20 @@
 # [Redux-Saga React playlist](https://www.youtube.com/playlist?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB)
 
+## [Redux-Saga React Полный Курс. Урок 2. Эффекты в деталях. Архитектура саг. React Router + Redux Saga.](https://www.youtube.com/watch?v=7Pq-2bBIzXY&list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&index=2)
+
+---
+
 ## [Redux-Saga API Reference](https://redux-saga.js.org/docs/api#api-reference)
 
 ---
 
-[Continue ...](https://youtu.be/ah5voE_SGjo?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&t=2485)
+`Redux-Saga` - работает поверх ES6 генераторов, поэтому умеет приостанавливать и возобнавлять работу в любой момент
+
+[Тут всё коротко и понятно](https://redux-saga.js.org/docs/Glossary)
+
+---
+
+[Continue ...](https://youtu.be/7Pq-2bBIzXY?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&t=31)
 
 ---
 
@@ -67,7 +77,7 @@ Saga Worker - выполняет бизнесс логику (запрос/та�
 
 Saga Watcher - следит за `dispatch` `action` в приложении и запускает `worker`;
 
-Effects - Вызываются в `Watcher`. Функции создающие объекты, у которых описаны инструкции выполнения действий.
+Effects - это простой объект `JavaScript`, содержащий некоторые инструкции, которые будут выполнены в `Saga Middleware`.
 
 ---
 
@@ -255,6 +265,10 @@ export default function* rootSaga() { /* ... */ }
 `take` & `call` - блокирующие еффекты
 `takeEvery` сам по себе не блокирующий, но внутри использует `take` + `fork`
 
+Блокирующий вызов означает, что сага `yielded` эффект и будет ждать результата своего выполнения, прежде чем возобновить выполнение следующей инструкции внутри генератора, выдающего результат.
+
+Неблокирующий вызов означает, что сага возобновится (продолжит выполнять код дальше, возможно паралельно запустит следующий еффект) сразу после получения Эффекта.
+
 ---
 
 ### [fork()](https://redux-saga.js.org/docs/api/#forkfn-args)
@@ -301,5 +315,48 @@ export function* workerSaga() {
   // ...
   yield spawn(loadPeople);
   yield spawn(loadPlanets);
+}
+```
+
+---
+
+## `spawn` и `fork` возвращают объект `task`
+
+---
+
+### [Task](https://redux-saga.js.org/docs/Glossary/#task)
+
+Task - похож на процесс запущеный в фоне. В приложениях с redux-saga может быть много `tasks` (задач) запущеных паралельно.
+
+---
+
+### [join()](https://redux-saga.js.org/docs/api/#jointask)
+
+- Заблокирует неблокирующую задачу и вернёт её результат (позволяет дождатся результата выполнения задачи )
+
+```js
+export function* loadPeople() {
+  const people = yield call(swapiGet, 'people');
+  yield put({ type: 'SET_PEOPLE', payload: people.results });
+  return people;
+}
+
+export function* workerSaga() {
+  const task = yield fork(loadPeople);
+  const people = yield join(task); // join
+}
+```
+
+---
+
+### [select()](https://redux-saga.js.org/docs/api/#selectselector-args)
+
+- Получить данные из store, useSelect/mapStateToProps (не блокирующий еффект)
+
+- Лучшая практика - держать отдельно `store` от саг, писать код так чтоб сага была автономной и не зависила от `store` и получать значение от `actions`
+
+```js
+export function* workerSaga() {
+  const store = yield select((s) => s);
 }
 ```
