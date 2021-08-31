@@ -14,7 +14,13 @@
 
 ---
 
-[Continue ...](https://youtu.be/7Pq-2bBIzXY?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&t=31)
+[Continue ...](https://youtu.be/7Pq-2bBIzXY?list=PLdTPrJkdrLGFLkjyq_lXzTNuiWodTtPPB&t=570)
+
+---
+
+---
+
+## Всё что ниже - из предидущего видео !
 
 ---
 
